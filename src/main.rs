@@ -20,7 +20,7 @@ use select::predicate::{Name};
 
 use std::path::Path;
 
-use std::io::{self, Write};
+use std::io::{self, Read, Write};
 use std::fs;
 
 use std::process::Command;
@@ -130,12 +130,12 @@ fn apply_zip(bytes: Bytes) -> Result<()> {
 
     let len = archive.len();
     print!("0%");
-    io::stdout().flush();
+    io::stdout().flush().unwrap();
 
     for i in 0..archive.len() {
         let percentage = i*100/len;
         print!("\r{}%", percentage);
-        io::stdout().flush();
+        io::stdout().flush().unwrap();
 
         let mut file = archive.by_index(i).unwrap();
         let outpath = file.sanitized_name();
@@ -168,13 +168,15 @@ fn apply_zip(bytes: Bytes) -> Result<()> {
 }
 
 fn launch(close_window: bool) -> () {
+    let mut close_window = close_window;
     let result = Command::new("eqgame").arg("patchme").spawn();
     if result.is_err() {
         println!("Failed to launch game because: {}", result.unwrap_err());
-        return ();
+        close_window = false;
     }
-    if close_window {
-        ::std::process::exit(0);
+    if !close_window {
+        println!("Press any key to exit...");
+        io::stdin().read(&mut [0]).unwrap();
     }
 }
 
