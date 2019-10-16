@@ -183,7 +183,8 @@ fn launch(close_window: bool) -> () {
 #[tokio::main]
 async fn main() -> Result<()> {
     println!("Checking for update...");
-    let val = find_latest_version_download(vec!["https://www.project1999.com/".to_string(), "https://www.project1999.com/forums/showthread.php?t=2651".to_string()]).await;
+    // removed "https://www.project1999.com/".to_string(), because beta news is published there.
+    let val = find_latest_version_download(vec!["https://www.project1999.com/forums/showthread.php?t=2651".to_string()]).await;
     if val.is_err() {
         println!("Failed to check for update because: {}", val.unwrap_err());
         println!("\n\nIs your internet working okay?\n\nLaunching game anyway...");
