@@ -235,6 +235,8 @@ async fn main() -> Result<()> {
     } else {
         println!("Found update: {}", file_version);
     }
+    
+    let file_url = file_url.replace("http://", "https://");
 
     println!("Downloading file {}. This might take a while...", &file_url);
 
@@ -245,6 +247,7 @@ async fn main() -> Result<()> {
         launch(false);
         return Ok(());
     }
+
     let zip_data = zip_data.unwrap();
     
     println!("Done downloading zip file.");
