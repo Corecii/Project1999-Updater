@@ -235,6 +235,25 @@ async fn main() -> Result<()> {
     } else {
         println!("Found update: {}", file_version);
     }
+
+    println!("Update to {}? Y(es)/N(o) [Default: No]", file_version);
+
+    let mut choice = String::new();
+    match io::stdin().read_line(&mut choice) {
+        Ok(_line) => {
+            if choice.trim().to_lowercase() != "y" && choice.trim().to_lowercase() != "yes" {
+                println!("Ignoring update.\n\nLaunching game...");
+                launch(true);
+                return Ok(());
+            }
+        }
+        Err(e) => {
+            println!("Failed to read line because: {}", e);
+            println!("\n\nLaunching game anyway...");
+            launch(true);
+            return Ok(());
+        }
+    }
     
     let file_url = file_url.replace("http://", "https://");
 
